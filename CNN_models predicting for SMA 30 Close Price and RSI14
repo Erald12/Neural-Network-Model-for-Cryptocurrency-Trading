@@ -1,0 +1,418 @@
+import multiprocessing
+
+import ccxt
+import numpy as np
+import pandas as pd
+from sklearn.metrics import mean_squared_error
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv1D, Flatten, Dense
+from datetime import datetime, timedelta
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ReduceLROnPlateau
+from sklearn.preprocessing import MinMaxScaler
+import talib
+
+def script1():
+    # Initialize Bitget exchange
+    exchange = ccxt.bitget({
+        'apiKey': 'bg_e10bcb723a9a90953160094bf0177465',
+        'secret': 'fc8bb8253252b1caf6c22077c656b82027076290d669cee8c746f57e44975ac5',
+        'password': 'Easy09159562534',
+    })
+
+    # Define the trading pair and timeframe
+    symbol = 'BNB/USDT'
+    timeframe = '5m'
+
+    # Fetch historical data from Bitget
+    limit = 864  # Number of candles to retrieve
+    hours_diff = 72
+
+    # Calculate the start time as 12 hours ago from the current time
+    today_time = datetime.now()
+    past_time1 = today_time - timedelta(hours=hours_diff)
+    past_time2 = past_time1 - timedelta(hours=hours_diff)
+    past_time3 = past_time2 - timedelta(hours=hours_diff)
+    past_time4 = past_time3 - timedelta(hours=hours_diff)
+    past_time5 = past_time4 - timedelta(hours=hours_diff)
+    past_time6 = past_time5 - timedelta(hours=hours_diff)
+    past_time7 = past_time6 - timedelta(hours=hours_diff)
+    past_time8 = past_time7 - timedelta(hours=hours_diff)
+    past_time9 = past_time8 - timedelta(hours=hours_diff)
+    past_time10 = past_time9 - timedelta(hours=hours_diff)
+    past_time11 = past_time10 - timedelta(hours=hours_diff)
+    past_time12 = past_time11 - timedelta(hours=hours_diff)
+    past_time13 = past_time12 - timedelta(hours=hours_diff)
+    past_time14 = past_time13 - timedelta(hours=hours_diff)
+    past_time15 = past_time14 - timedelta(hours=hours_diff)
+    past_time16 = past_time15 - timedelta(hours=hours_diff)
+    past_time17 = past_time16 - timedelta(hours=hours_diff)
+    past_time18 = past_time17 - timedelta(hours=hours_diff)
+    past_time19 = past_time18 - timedelta(hours=hours_diff)
+    past_time20 = past_time19 - timedelta(hours=hours_diff)
+    past_time21 = past_time20 - timedelta(hours=hours_diff)
+    past_time22 = past_time21 - timedelta(hours=hours_diff)
+    past_time23 = past_time22 - timedelta(hours=hours_diff)
+    past_time24 = past_time23 - timedelta(hours=hours_diff)
+    past_time25 = past_time24 - timedelta(hours=hours_diff)
+    past_time26 = past_time25 - timedelta(hours=hours_diff)
+
+    # Convert start_time and end_time to Unix timestamps (milliseconds since epoch)
+    past1_timestamp = int(past_time1.timestamp()) * 1000
+    past2_timestamp = int(past_time2.timestamp()) * 1000
+    past3_timestamp = int(past_time3.timestamp()) * 1000
+    past4_timestamp = int(past_time4.timestamp()) * 1000
+    past5_timestamp = int(past_time5.timestamp()) * 1000
+    past6_timestamp = int(past_time6.timestamp()) * 1000
+    past7_timestamp = int(past_time7.timestamp()) * 1000
+    past8_timestamp = int(past_time8.timestamp()) * 1000
+    past9_timestamp = int(past_time9.timestamp()) * 1000
+    past10_timestamp = int(past_time10.timestamp()) * 1000
+    past11_timestamp = int(past_time11.timestamp()) * 1000
+    past12_timestamp = int(past_time12.timestamp()) * 1000
+    past13_timestamp = int(past_time13.timestamp()) * 1000
+    past14_timestamp = int(past_time14.timestamp()) * 1000
+    past15_timestamp = int(past_time15.timestamp()) * 1000
+    past16_timestamp = int(past_time16.timestamp()) * 1000
+    past17_timestamp = int(past_time17.timestamp()) * 1000
+    past18_timestamp = int(past_time18.timestamp()) * 1000
+    past19_timestamp = int(past_time19.timestamp()) * 1000
+    past20_timestamp = int(past_time20.timestamp()) * 1000
+    past21_timestamp = int(past_time21.timestamp()) * 1000
+    past22_timestamp = int(past_time22.timestamp()) * 1000
+    past23_timestamp = int(past_time23.timestamp()) * 1000
+    past24_timestamp = int(past_time24.timestamp()) * 1000
+    past25_timestamp = int(past_time25.timestamp()) * 1000
+    past26_timestamp = int(past_time26.timestamp()) * 1000
+
+    # Fetching Data Sets
+    ohlcv_past1 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit, since=past1_timestamp)
+    ohlcv_past2 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past2_timestamp)
+    ohlcv_past3 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past3_timestamp)
+    ohlcv_past4 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past4_timestamp)
+    ohlcv_past5 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past5_timestamp)
+    ohlcv_past6 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past6_timestamp)
+    ohlcv_past7 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past7_timestamp)
+    ohlcv_past8 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past8_timestamp)
+    ohlcv_past9 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past9_timestamp)
+    ohlcv_past10 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past10_timestamp)
+    ohlcv_past11 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past11_timestamp)
+    ohlcv_past12 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past12_timestamp)
+    ohlcv_past13 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past13_timestamp)
+    ohlcv_past14 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past14_timestamp)
+    ohlcv_past15 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past15_timestamp)
+    ohlcv_past16 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past16_timestamp)
+    ohlcv_past17 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past17_timestamp)
+    ohlcv_past18 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past18_timestamp)
+    ohlcv_past19 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past19_timestamp)
+    ohlcv_past20 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past20_timestamp)
+    ohlcv_past21 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past21_timestamp)
+    ohlcv_past22 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past22_timestamp)
+    ohlcv_past23 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past23_timestamp)
+    ohlcv_past24 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past24_timestamp)
+    ohlcv_past25 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past25_timestamp)
+    ohlcv_past26 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past26_timestamp)
+
+    # Combine historical data
+    ohlcv = ohlcv_past1 + ohlcv_past2 + ohlcv_past3 + ohlcv_past4 + ohlcv_past5 + ohlcv_past6 + ohlcv_past7 + ohlcv_past8 + ohlcv_past9 + ohlcv_past10 + ohlcv_past11 + ohlcv_past12 + ohlcv_past13 + ohlcv_past14 + ohlcv_past15 + ohlcv_past16 + ohlcv_past17 + ohlcv_past18 + ohlcv_past19 + ohlcv_past20 + ohlcv_past21 + ohlcv_past22 + ohlcv_past23 + ohlcv_past24 + ohlcv_past25 + ohlcv_past26
+
+    # Sort the combined data by timestamp in ascending order
+    ohlcv.sort(key=lambda x: x[0])  # Assuming the timestamp is in the first column (index 0) of each OHLCV data point
+
+    df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+
+    # Define a function to calculate RSI
+    def calculate_rsi(prices, period=14):
+        rsi = talib.RSI(prices, timeperiod=period)
+        return rsi
+
+    def calculate_ema9(data):
+        ema9 = talib.EMA(data, timeperiod=4)
+        return ema9
+
+    # Data preprocessing
+    # Extract the 'close' prices
+    prices_close = df['close'].values
+    #prices_close_list = list(df['close'].values)
+
+    rsi14 = calculate_rsi(prices_close)
+    # Check for NaN values
+    mask_rsi = np.isnan(rsi14)
+    rsi14 = rsi14[~mask_rsi]
+
+    print(np.prod(prices_close.shape))
+    ema9 = calculate_ema9(rsi14)
+
+    # Check for NaN values
+    mask = np.isnan(ema9)
+    ema = ema9[~mask]
+    print(np.prod(ema.shape))
+
+    # Reshape the data if necessary
+    ema = ema.reshape(-1, 1)
+
+    # Optionally, you can also apply Robust scaling after log transformation
+    scaler = MinMaxScaler()
+    ema = scaler.fit_transform(ema)
+
+    # Split data into training and testing sets
+    train_size = int(len(ema) * 0.975)
+    train_data, test_data = ema[0:train_size], ema[train_size:]
+
+    # Create sequences for training
+    def create_sequences(data, seq_length):
+        X, y = [], []
+        for i in range(len(data) - seq_length):
+            X.append(data[i:i + seq_length])
+            y.append(data[i + seq_length])
+        return np.array(X), np.array(y)
+
+    seq_length = 40  # Experiment with different sequence lengths
+    X_train, y_train = create_sequences(train_data, seq_length)
+    X_test, y_test = create_sequences(test_data, seq_length)
+
+    # Define the EarlyStopping callback
+    early_stopping = EarlyStopping(
+        monitor='loss',  # Quantity to monitor (validation loss in this case)
+        patience=3,  # Number of epochs with no improvement after which training will be stopped
+        restore_best_weights=True  # Restores model weights from the epoch with the best value of the monitored quantity
+    )
+
+    reduce_lr = ReduceLROnPlateau(monitor='loss', factor=0.5, patience=2, min_lr=0.0001)
+
+    # Build the CNN model
+    cnn_filters = 32
+    cnn_kernel_size = 10
+    model = Sequential()
+    model.add(Conv1D(cnn_filters, cnn_kernel_size, activation='mish', input_shape=(seq_length, 1)))
+    model.add(Flatten())
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mean_squared_error', run_eagerly=True)
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=150, batch_size=64, callbacks=[reduce_lr, early_stopping])
+
+    # Make predictions on the test set
+    y_pred = model.predict(X_test)
+
+    # Save the trained model to a file
+    model.save('5min_model1_RSI.h5')
+
+    # Inverse transform the predictions to the original scale
+    y_pred = scaler.inverse_transform(y_pred)
+    y_test = scaler.inverse_transform(y_test)
+
+    # Calculate the root mean squared error
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    print("Root Mean Squared Error:", rmse)
+
+
+
+
+def script2():
+    # Initialize Bitget exchange
+    exchange = ccxt.bitget({
+        'apiKey': 'bg_e10bcb723a9a90953160094bf0177465',
+        'secret': 'fc8bb8253252b1caf6c22077c656b82027076290d669cee8c746f57e44975ac5',
+        'password': 'Easy09159562534',
+    })
+
+    # Define the trading pair and timeframe
+    symbol = 'BNB/USDT'
+    timeframe = '5m'
+
+    # Fetch historical data from Bitget
+    limit = 864  # Number of candles to retrieve
+    hours_diff = 72
+
+    # Calculate the start time as 12 hours ago from the current time
+    today_time = datetime.now()
+    past_time1 = today_time - timedelta(hours=hours_diff)
+    past_time2 = past_time1 - timedelta(hours=hours_diff)
+    past_time3 = past_time2 - timedelta(hours=hours_diff)
+    past_time4 = past_time3 - timedelta(hours=hours_diff)
+    past_time5 = past_time4 - timedelta(hours=hours_diff)
+    past_time6 = past_time5 - timedelta(hours=hours_diff)
+    past_time7 = past_time6 - timedelta(hours=hours_diff)
+    past_time8 = past_time7 - timedelta(hours=hours_diff)
+    past_time9 = past_time8 - timedelta(hours=hours_diff)
+    past_time10 = past_time9 - timedelta(hours=hours_diff)
+    past_time11 = past_time10 - timedelta(hours=hours_diff)
+    past_time12 = past_time11 - timedelta(hours=hours_diff)
+    past_time13 = past_time12 - timedelta(hours=hours_diff)
+    past_time14 = past_time13 - timedelta(hours=hours_diff)
+    past_time15 = past_time14 - timedelta(hours=hours_diff)
+    past_time16 = past_time15 - timedelta(hours=hours_diff)
+    past_time17 = past_time16 - timedelta(hours=hours_diff)
+    past_time18 = past_time17 - timedelta(hours=hours_diff)
+    past_time19 = past_time18 - timedelta(hours=hours_diff)
+    past_time20 = past_time19 - timedelta(hours=hours_diff)
+    past_time21 = past_time20 - timedelta(hours=hours_diff)
+    past_time22 = past_time21 - timedelta(hours=hours_diff)
+    past_time23 = past_time22 - timedelta(hours=hours_diff)
+    past_time24 = past_time23 - timedelta(hours=hours_diff)
+    past_time25 = past_time24 - timedelta(hours=hours_diff)
+    past_time26 = past_time25 - timedelta(hours=hours_diff)
+
+    # Convert start_time and end_time to Unix timestamps (milliseconds since epoch)
+    past1_timestamp = int(past_time1.timestamp()) * 1000
+    past2_timestamp = int(past_time2.timestamp()) * 1000
+    past3_timestamp = int(past_time3.timestamp()) * 1000
+    past4_timestamp = int(past_time4.timestamp()) * 1000
+    past5_timestamp = int(past_time5.timestamp()) * 1000
+    past6_timestamp = int(past_time6.timestamp()) * 1000
+    past7_timestamp = int(past_time7.timestamp()) * 1000
+    past8_timestamp = int(past_time8.timestamp()) * 1000
+    past9_timestamp = int(past_time9.timestamp()) * 1000
+    past10_timestamp = int(past_time10.timestamp()) * 1000
+    past11_timestamp = int(past_time11.timestamp()) * 1000
+    past12_timestamp = int(past_time12.timestamp()) * 1000
+    past13_timestamp = int(past_time13.timestamp()) * 1000
+    past14_timestamp = int(past_time14.timestamp()) * 1000
+    past15_timestamp = int(past_time15.timestamp()) * 1000
+    past16_timestamp = int(past_time16.timestamp()) * 1000
+    past17_timestamp = int(past_time17.timestamp()) * 1000
+    past18_timestamp = int(past_time18.timestamp()) * 1000
+    past19_timestamp = int(past_time19.timestamp()) * 1000
+    past20_timestamp = int(past_time20.timestamp()) * 1000
+    past21_timestamp = int(past_time21.timestamp()) * 1000
+    past22_timestamp = int(past_time22.timestamp()) * 1000
+    past23_timestamp = int(past_time23.timestamp()) * 1000
+    past24_timestamp = int(past_time24.timestamp()) * 1000
+    past25_timestamp = int(past_time25.timestamp()) * 1000
+    past26_timestamp = int(past_time26.timestamp()) * 1000
+
+    # Fetching Data Sets
+    ohlcv_past1 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit, since=past1_timestamp)
+    ohlcv_past2 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past2_timestamp)
+    ohlcv_past3 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past3_timestamp)
+    ohlcv_past4 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past4_timestamp)
+    ohlcv_past5 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past5_timestamp)
+    ohlcv_past6 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past6_timestamp)
+    ohlcv_past7 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past7_timestamp)
+    ohlcv_past8 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past8_timestamp)
+    ohlcv_past9 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past9_timestamp)
+    ohlcv_past10 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past10_timestamp)
+    ohlcv_past11 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past11_timestamp)
+    ohlcv_past12 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past12_timestamp)
+    ohlcv_past13 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past13_timestamp)
+    ohlcv_past14 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past14_timestamp)
+    ohlcv_past15 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past15_timestamp)
+    ohlcv_past16 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past16_timestamp)
+    ohlcv_past17 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past17_timestamp)
+    ohlcv_past18 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past18_timestamp)
+    ohlcv_past19 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past19_timestamp)
+    ohlcv_past20 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past20_timestamp)
+    ohlcv_past21 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past21_timestamp)
+    ohlcv_past22 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past22_timestamp)
+    ohlcv_past23 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past23_timestamp)
+    ohlcv_past24 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past24_timestamp)
+    ohlcv_past25 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past25_timestamp)
+    ohlcv_past26 = exchange.fetch_ohlcv(symbol, timeframe, limit=limit - 1, since=past26_timestamp)
+
+    # Combine historical data
+    ohlcv = ohlcv_past1 + ohlcv_past2 + ohlcv_past3 + ohlcv_past4 + ohlcv_past5 + ohlcv_past6 + ohlcv_past7 + ohlcv_past8 + ohlcv_past9 + ohlcv_past10 + ohlcv_past11 + ohlcv_past12 + ohlcv_past13 + ohlcv_past14 + ohlcv_past15 + ohlcv_past16 + ohlcv_past17 + ohlcv_past18 + ohlcv_past19 + ohlcv_past20 + ohlcv_past21 + ohlcv_past22 + ohlcv_past23 + ohlcv_past24 + ohlcv_past25 + ohlcv_past26
+
+    # Sort the combined data by timestamp in ascending order
+    ohlcv.sort(key=lambda x: x[0])  # Assuming the timestamp is in the first column (index 0) of each OHLCV data point
+
+    df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+
+    # Define a function to calculate RSI
+    def calculate_rsi(prices, period=14):
+        rsi = talib.RSI(prices, timeperiod=period)
+        return rsi
+    
+    # Define a function to calculate SMA
+    def calculate_ema9(data):
+        ema9 = talib.SMA(data, timeperiod=30)
+        return ema9
+
+    # Data preprocessing
+    # Extract the 'close' prices
+    prices_close = df['close'].values
+    #prices_close_list = list(df['close'].values)
+
+    print(np.prod(prices_close.shape))
+    ema9_close = calculate_ema9(prices_close)
+
+    # Check for NaN values
+    mask_close = np.isnan(ema9_close)
+    ema9_close = ema9_close[~mask_close]
+    print(np.prod(ema9_close.shape))
+
+    # Reshape the data if necessary
+    ema9_close = ema9_close.reshape(-1, 1)
+
+    # Optionally, you can also apply Robust scaling after log transformation
+    scaler = MinMaxScaler()
+    ema9_close = scaler.fit_transform(ema9_close)
+
+    # Split data into training and testing sets
+    train_size_close = int(len(ema9_close) * 0.975)
+    train_data_close, test_data_close = ema9_close[0:train_size_close], ema9_close[train_size_close:]
+
+    # Create sequences for training
+    def create_sequences(data, seq_length):
+        X, y = [], []
+        for i in range(len(data) - seq_length):
+            X.append(data[i:i + seq_length])
+            y.append(data[i + seq_length])
+        return np.array(X), np.array(y)
+
+    seq_length_close = 40  # Experiment with different sequence lengths
+    X_train_close, y_train_close = create_sequences(train_data_close, seq_length_close)
+    X_test_close, y_test_close = create_sequences(test_data_close, seq_length_close)
+
+    # Define the EarlyStopping callback
+    early_stopping = EarlyStopping(
+        monitor='loss',  # Quantity to monitor (validation loss in this case)
+        patience=3,  # Number of epochs with no improvement after which training will be stopped
+        restore_best_weights=True  # Restores model weights from the epoch with the best value of the monitored quantity
+    )
+
+    reduce_lr = ReduceLROnPlateau(monitor='loss', factor=0.5, patience=2, min_lr=0.0001)
+
+    # Build the CNN model
+    cnn_filters = 32
+    cnn_kernel_size = 10
+    model = Sequential()
+    model.add(Conv1D(cnn_filters, cnn_kernel_size, activation='mish', input_shape=(seq_length_close, 1)))
+    model.add(Flatten())
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mean_squared_error', run_eagerly=True)
+
+    # Train the model
+    model.fit(X_train_close, y_train_close, epochs=150, batch_size=64, callbacks=[reduce_lr, early_stopping])
+
+    # Make predictions on the test set
+    y_pred_close = model.predict(X_test_close)
+
+    # Save the trained model to a file
+    model.save('5min_model1_Price.h5')
+
+    # Inverse transform the predictions to the original scale
+    y_pred_close = scaler.inverse_transform(y_pred_close)
+    y_test_close = scaler.inverse_transform(y_test_close)
+
+    # Calculate the root mean squared error
+    rmse_close = np.sqrt(mean_squared_error(y_test_close, y_pred_close))
+    print("Root Mean Squared Error:", rmse_close)
+
+
+
+
+if __name__ == "__main__":
+    # Create two separate processes for each script
+    process1 = multiprocessing.Process(target=script1)
+    process2 = multiprocessing.Process(target=script2)
+
+    # Start both processes
+    process1.start()
+    process2.start()
+
+    # Wait for both processes to finish
+    process1.join()
+    process2.join()
+
+    print("Both scripts have finished executing.")
