@@ -15,11 +15,11 @@ from tensorflow.keras.models import load_model
 
 
 # Initialize Bitget exchange
-exchange = ccxt.bitget({
-    'apiKey': 'bg_e10bcb723a9a90953160094bf0177465',
-    'secret': 'fc8bb8253252b1caf6c22077c656b82027076290d669cee8c746f57e44975ac5',
-    'password': 'Easy09159562534',
-})
+    exchange = ccxt.bitget({
+        'apiKey': 'Your Bitget API Key',
+        'secret': 'Secret Key',
+        'password': 'Passphrase',
+    })
 
 
 # Define the trading pair and timeframe
